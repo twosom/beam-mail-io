@@ -1,7 +1,6 @@
 package com.icloud.connector.beam.model;
 
 import com.google.auto.value.AutoValue;
-import jakarta.mail.Flags;
 import java.util.List;
 import org.apache.beam.sdk.schemas.AutoValueSchema;
 import org.apache.beam.sdk.schemas.annotations.DefaultSchema;
@@ -23,7 +22,7 @@ public abstract class MailMessage {
 
   public abstract Instant getSentDate();
 
-  public abstract Flags getFlags();
+  public abstract @Nullable MailAttachment getAttachment();
 
   public static MailMessage create(
       String subject,
@@ -31,14 +30,14 @@ public abstract class MailMessage {
       String folderName,
       String content,
       Instant sentDate,
-      Flags flags) {
+      MailAttachment attachment) {
     return new AutoValue_MailMessage.Builder()
         .setSubject(subject)
         .setFrom(from)
         .setContent(content)
         .setSentDate(sentDate)
-        .setFlags(flags)
         .setFolderName(folderName)
+        .setAttachment(attachment)
         .build();
   }
 
@@ -54,7 +53,7 @@ public abstract class MailMessage {
 
     abstract Builder setSentDate(Instant sentDate);
 
-    abstract Builder setFlags(Flags flags);
+    abstract Builder setAttachment(MailAttachment attachment);
 
     abstract MailMessage build();
   }
