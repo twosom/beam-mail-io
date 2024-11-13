@@ -20,9 +20,9 @@ public abstract class MailMessage {
 
   public abstract String getContent();
 
-  public abstract Instant getSentDate();
+  public abstract @Nullable Instant getSentDate();
 
-  public abstract @Nullable MailAttachment getAttachment();
+  public abstract @Nullable List<MailAttachment> getAttachment();
 
   public static MailMessage create(
       String subject,
@@ -30,7 +30,7 @@ public abstract class MailMessage {
       String folderName,
       String content,
       Instant sentDate,
-      MailAttachment attachment) {
+      List<MailAttachment> attachment) {
     return new AutoValue_MailMessage.Builder()
         .setSubject(subject)
         .setFrom(from)
@@ -53,7 +53,7 @@ public abstract class MailMessage {
 
     abstract Builder setSentDate(Instant sentDate);
 
-    abstract Builder setAttachment(MailAttachment attachment);
+    abstract Builder setAttachment(List<MailAttachment> attachment);
 
     abstract MailMessage build();
   }
