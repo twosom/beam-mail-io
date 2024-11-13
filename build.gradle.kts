@@ -5,8 +5,11 @@ plugins {
 
 val beamVersion: String = "2.60.0"
 
-allprojects {
+repositories {
+    mavenCentral()
+}
 
+allprojects {
     group = "com.icloud"
     version = "1.0.0-SNAPSHOT"
 
@@ -18,6 +21,14 @@ allprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    spotless {
+        java {
+            importOrder()
+            removeUnusedImports()
+            googleJavaFormat()
+        }
     }
 
     repositories {
@@ -34,6 +45,7 @@ allprojects {
 
         beamRuntimeOnly(
             "beam-runners-direct-java",
+            "beam-runners-flink-1.18"
         )
 
         // logger
@@ -44,19 +56,9 @@ allprojects {
         testImplementation("org.junit.jupiter:junit-jupiter")
     }
 
-
-    spotless {
-        java {
-            importOrder()
-            removeUnusedImports()
-            googleJavaFormat()
-        }
-    }
-
     tasks.test {
         useJUnitPlatform()
     }
-
 }
 
 
