@@ -6,7 +6,15 @@ import com.google.auto.value.AutoValue;
 import jakarta.mail.Flags;
 import jakarta.mail.Message;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.search.*;
+import jakarta.mail.search.AndTerm;
+import jakarta.mail.search.FlagTerm;
+import jakarta.mail.search.FromStringTerm;
+import jakarta.mail.search.OrTerm;
+import jakarta.mail.search.ReceivedDateTerm;
+import jakarta.mail.search.RecipientStringTerm;
+import jakarta.mail.search.SearchTerm;
+import jakarta.mail.search.SizeTerm;
+import jakarta.mail.search.SubjectTerm;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
@@ -65,11 +73,11 @@ public abstract class SearchFilter implements Serializable {
   abstract Builder toBuilder();
 
   static Builder builder() {
-    return new AutoValue_MailIO_SearchFilter.Builder();
+    return new AutoValue_SearchFilter.Builder();
   }
 
   public static SearchFilter create() {
-    return new AutoValue_MailIO_SearchFilter.Builder().build();
+    return new AutoValue_SearchFilter.Builder().build();
   }
 
   public SearchFilter subject(String subject) {
