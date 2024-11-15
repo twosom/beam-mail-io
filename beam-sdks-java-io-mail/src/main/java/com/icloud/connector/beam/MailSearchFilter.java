@@ -18,10 +18,9 @@ import jakarta.mail.search.SubjectTerm;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 @AutoValue
-public abstract class SearchFilter implements Serializable {
+public abstract class MailSearchFilter implements Serializable {
   public enum Condition {
     LE(1),
     LT(2),
@@ -68,29 +67,25 @@ public abstract class SearchFilter implements Serializable {
     }
   }
 
-  abstract @Nullable SearchTerm searchTerm();
+  abstract SearchTerm searchTerm();
 
   abstract Builder toBuilder();
 
   static Builder builder() {
-    return new AutoValue_SearchFilter.Builder();
+    return new AutoValue_MailSearchFilter.Builder();
   }
 
-  public static SearchFilter create() {
-    return new AutoValue_SearchFilter.Builder().build();
-  }
-
-  public SearchFilter subject(String subject) {
+  public static MailSearchFilter subject(String subject) {
     final SearchTerm term = new SubjectTerm(subject);
-    return toBuilder().setSearchTerm(term).build();
+    return builder().setSearchTerm(term).build();
   }
 
-  public SearchFilter from(String from) {
+  public static MailSearchFilter from(String from) {
     final SearchTerm term = new FromStringTerm(from);
-    return toBuilder().setSearchTerm(term).build();
+    return builder().setSearchTerm(term).build();
   }
 
-  public SearchFilter recipient(String recipientType, String recipient) {
+  public static MailSearchFilter recipient(String recipientType, String recipient) {
     Message.RecipientType type;
     recipientType = recipientType.toLowerCase(Locale.ROOT);
     switch (recipientType) {
@@ -114,31 +109,31 @@ public abstract class SearchFilter implements Serializable {
     }
 
     final SearchTerm searchTerm = new RecipientStringTerm(type, recipient);
-    return toBuilder().setSearchTerm(searchTerm).build();
+    return builder().setSearchTerm(searchTerm).build();
   }
 
-  public SearchFilter receivedDate(Condition condition, Date date) {
+  public static MailSearchFilter receivedDate(Condition condition, Date date) {
     final SearchTerm searchTerm = new ReceivedDateTerm(condition.value, date);
-    return toBuilder().setSearchTerm(searchTerm).build();
+    return builder().setSearchTerm(searchTerm).build();
   }
 
-  public SearchFilter flag(Flag flag, boolean set) {
+  public static MailSearchFilter flag(Flag flag, boolean set) {
     final SearchTerm searchTerm = new FlagTerm(new Flags(flag.toMailFlag()), set);
-    return toBuilder().setSearchTerm(searchTerm).build();
+    return builder().setSearchTerm(searchTerm).build();
   }
 
-  public SearchFilter size(Condition condition, int size) {
+  public static MailSearchFilter size(Condition condition, int size) {
     final SearchTerm searchTerm = new SizeTerm(condition.value, size);
-    return toBuilder().setSearchTerm(searchTerm).build();
+    return builder().setSearchTerm(searchTerm).build();
   }
 
-  public SearchFilter and(SearchFilter other) {
+  public MailSearchFilter and(MailSearchFilter other) {
     checkState(searchTerm() != null, "searchTerm can not be null");
     SearchTerm searchTerm = new AndTerm(searchTerm(), other.searchTerm());
     return toBuilder().setSearchTerm(searchTerm).build();
   }
 
-  public SearchFilter or(SearchFilter other) {
+  public MailSearchFilter or(MailSearchFilter other) {
     checkState(searchTerm() != null, "searchTerm can not be null");
     SearchTerm searchTerm = new OrTerm(searchTerm(), other.searchTerm());
     return toBuilder().setSearchTerm(searchTerm).build();
@@ -148,6 +143,6 @@ public abstract class SearchFilter implements Serializable {
   abstract static class Builder {
     abstract Builder setSearchTerm(SearchTerm searchTerm);
 
-    abstract SearchFilter build();
+    abstract MailSearchFilter build();
   }
 }
