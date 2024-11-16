@@ -1,7 +1,7 @@
 package com.icloud.connector.beam.utils;
 
-import static com.icloud.connector.beam.BoundedMailReadFn.*;
-import static org.apache.beam.vendor.guava.v32_1_2_jre.com.google.common.base.Preconditions.*;
+import static com.icloud.connector.beam.BoundedMailReadFn.AttachmentHolder;
+import static org.apache.beam.vendor.guava.v32_1_2_jre.com.google.common.base.Preconditions.checkArgument;
 
 import com.icloud.connector.beam.MailIO;
 import jakarta.mail.Folder;
